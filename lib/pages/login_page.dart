@@ -15,28 +15,33 @@ class _LoginPageState extends AuthState<LoginPage> {
   bool _isLoading = false;
   late final TextEditingController _emailController;
 
-  Future<void> _signIn() async {
-    setState(() {
+	void loadingAnimation(Function f) {
+		setState(() {
       _isLoading = true;
     });
-    final response = await supabase.auth.signIn(
-        email: _emailController.text,
-        options: AuthOptions(
-            redirectTo: kIsWeb
-                ? null
-                : 'io.supabase.flutterquickstart://login-callback/'));
-    final error = response.error;
-    if (error != null) {
-      context.showErrorSnackBar(message: error.message);
-    } else {
-      context.showSnackBar(message: 'Check your email for login link!');
-      _emailController.clear();
-    }
-
-    setState(() {
+		f();
+		setState(() {
       _isLoading = false;
     });
-  }
+	}
+
+  Future<void> _signIn() async =>
+		loadingAnimation(() async {
+    	final response = await supabase.auth.signIn(
+				email: _emailController.text,
+				options: AuthOptions(
+					redirectTo: kIsWeb ? null
+							               : 'io.supabase.flutterquickstart://login-callback/'
+				)
+			);
+    	final error = response.error;
+    	if (error != null) {
+    	  context.showErrorSnackBar(message: error.message);
+    	} else {
+    	  context.showSnackBar(message: 'Check your email for login link!');
+    	  _emailController.clear();
+    	}
+		});
 
   @override
   void initState() {
