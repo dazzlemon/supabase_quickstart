@@ -3,21 +3,18 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:supabase_quickstart/utils/constants.dart';
 
 class AuthState<T extends StatefulWidget> extends SupabaseAuthState<T> {
-  @override
-  void onUnauthenticated() {
-    if (mounted) {
-      Navigator.of(context)
-			         .pushNamedAndRemoveUntil('/login', (route) => false);
-    }
-  }
+	void changeRoute(String newRoute) {
+		if (mounted) {
+			Navigator.of(context)
+			         .pushNamedAndRemoveUntil(newRoute, (route) => false);
+		}
+	}
 
   @override
-  void onAuthenticated(Session session) {
-    if (mounted) {
-      Navigator.of(context)
-			         .pushNamedAndRemoveUntil('/account', (route) => false);
-    }
-  }
+  void onUnauthenticated() => changeRoute('/login');
+
+  @override
+  void onAuthenticated(Session session) => changeRoute('/account');
 
   @override
   void onPasswordRecovery(Session session) {}
