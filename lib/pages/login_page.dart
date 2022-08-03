@@ -15,7 +15,7 @@ class _LoginPageState extends AuthState<LoginPage> {
   bool _isLoading = false;
   late final TextEditingController _emailController;
 
-	void loadingAnimation(Function f) {
+	void _loadingAnimation(Function f) {
 		setState(() {
       _isLoading = true;
     });
@@ -26,7 +26,7 @@ class _LoginPageState extends AuthState<LoginPage> {
 	}
 
   Future<void> _signIn() async =>
-		loadingAnimation(() async {
+		_loadingAnimation(() async {
     	final response = await supabase.auth.signIn(
 				email: _emailController.text,
 				options: AuthOptions(
